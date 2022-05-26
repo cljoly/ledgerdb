@@ -1,0 +1,16 @@
+[package]
+name = "ledgerdb"
+version = "1.0.0"
+authors = ["Adithya Chari <adithya.chari@gmail.com>"]
+edition = "2021"
+license = "MIT"
+description = "Gets price updates for stock ticker symbols in your ledger-cli file"
+homepage = "https://sr.ht/~adchari/ledgerdb/"
+documentation = "https://sr.ht/~adchari/ledgerdb/"
+repository = "https://git.sr.ht/~adchari/ledgerdb"
+readme = "README.md"
+keywords = ["cli", "ledger", "finance"]
+categories = ["command-line-utilities"]
+
+[dependencies]
+clap = "3.1.18"
