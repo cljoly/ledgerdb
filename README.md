@@ -14,5 +14,14 @@ This package has been published to crates.io, and is installable with cargo.
 
 ```
 USAGE:
-    ledgerdb -f [ledger file] -p [price database file (to create or update)] -a [AlphaVantage API Token] -b [Name of ledger binary]
+    ledgerdb --file <LEDGER_FILE> --pricedb <PRICE_DATABASE> --api-token <API_TOKEN>
+
+OPTIONS:
+    -a, --api-token <API_TOKEN>       Takes your AlphaVantage API token, available for free at the
+                                      website
+    -f, --file <LEDGER_FILE>          Takes the filepath of your ledger-cli file
+    -h, --help                        Print help information
+    -p, --pricedb <PRICE_DATABASE>    Takes the filepath of your ledger-cli price database (or the
+                                      path to create it at)
+    -V, --version                     Print version information
 ```
