@@ -1,5 +1,6 @@
 extern crate clap;
 
+use anyhow::{anyhow, Result};
 use chrono;
 use clap::{Arg, Command};
 use reqwest;
@@ -80,13 +81,19 @@ fn get_all_prices(commodities: Vec<String>, token: &str) -> BTreeMap<String, f64
             start_time = Instant::now();
         }
 
-        map.insert(commodity.to_string(), get_price(commodity, token));
+        if commodity == "" {
+            continue
+        }
+        let _ = get_price(commodity, token)
+            .map(|price| map.insert(commodity.to_string(), price))
+            .map_err(|error| {println!("Error for commodity '{commodity}', skipping: {error}"); error});
+
     }
 
     map
 }
 
-fn get_price(commodity: &str, token: &str) -> f64 {
+fn get_price(commodity: &str, token: &str) -> Result<f64> {
     let res = reqwest::blocking::get(format!(
         "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={}&apikey={}",
         commodity, token
@@ -95,12 +102,12 @@ fn get_price(commodity: &str, token: &str) -> f64 {
     let body = res.text().unwrap();
 
     let json: Value = serde_json::from_str(&body).unwrap();
-    json.pointer("/Global Quote/05. price")
-        .unwrap()
+    Ok(json.pointer("/Global Quote/05. price")
+        .ok_or(anyhow!("price not found in response: {}", json))?
         .as_str()
         .unwrap()
-        .parse::<f64>()
-        .unwrap()
+        .parse::<f64>()?
+    )
 }
 
 fn get_commodities(file: &str) -> Vec<String> {
